@@ -1,4 +1,5 @@
 <template>
+  こんにちは
   <v-app id="inspire">
     <v-navigation-drawer
       model-value
