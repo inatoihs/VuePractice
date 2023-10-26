@@ -7,11 +7,13 @@
     <v-app-bar>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-app-bar-title>Applicationnnn</v-app-bar-title>
+      <v-app-bar-title>Application</v-app-bar-title>
     </v-app-bar>
 
     <v-main>
       <!--  -->
+      <create></create>
+
     </v-main>
   </v-app>
 </template>
@@ -23,7 +25,24 @@
 </script>
 
 <script>
-  export default {
-    data: () => ({ drawer: null }),
-  }
+import create from './components/PostCat.vue'
+export default{
+  data: () => ({ drawer: null }),
+  components:{
+    create,
+  },
+  setup() {
+    const displayCreate = ref(true);
+
+    const toCreate=()=>{
+      displayCreate.value = true;
+    };
+
+    return{
+      displayCreate,
+      toCreate,
+    };
+    
+  },
+};
 </script>
