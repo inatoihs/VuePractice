@@ -19,8 +19,10 @@ export default defineComponent({
       image.value = event.target.files[0]
     }
     const create=()=>{
-      uploadCat(image.value, 'red', 'dot','mike', 'Adult', 'True', 'False', '臆病です', '10','12', 'testID', 'True')
-    }
+      uploadCat({image:image.value, color:'red', pattern:'dot', breed:'mike', 
+      AdultOrChild:'Adult', isEarCut:'True', hasCollar:'False', comment:'臆病です。', 
+      latitude:'10', longitude:'12', userId:'testID', isNew:'True'})}
+    
     return{
       create,
       uploadFile,
