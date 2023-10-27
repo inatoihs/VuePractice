@@ -13,6 +13,7 @@
     <v-main>
       <!--  -->
       <create></create>
+      <search></search>
 
     </v-main>
   </v-app>
@@ -26,6 +27,7 @@
 
 <script>
 import create from './components/PostCat.vue'
+import search from './components/SearchCat.vue'
 export default{
   data: () => ({ drawer: null }),
   components:{

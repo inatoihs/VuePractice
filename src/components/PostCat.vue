@@ -13,18 +13,18 @@ import { uploadCat} from '../CatFirebase'
 
 export default defineComponent({
   setup() {
-    const fileData =ref()
+    const image =ref()
 
     const uploadFile = (event)=>{
-      fileData.value = event.target.files[0]
+      image.value = event.target.files[0]
     }
     const create=()=>{
-      uploadCat(fileData.value)
+      uploadCat(image.value, 'red', 'dot','mike', 'Adult', 'True', 'False', '臆病です', '10','12', 'testID', 'True')
     }
     return{
       create,
       uploadFile,
-      fileData
+      image
     }
   },
 })

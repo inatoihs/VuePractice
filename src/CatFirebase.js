@@ -1,24 +1,37 @@
-import { addDoc,collection,serverTimestamp, getDocs, getFirestore } from "firebase/firestore";
+import { addDoc,collection,serverTimestamp, getDocs, getFirestore, query, where} from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { firebaseApp } from "./firebase";
+import { v4 as uuidv4 } from 'uuid';
 
 //猫の情報をアップロードする関数。filedata(写真)だけじゃなくて設計に従って猫のIDとか柄とかも入れる
 //addDoc(collection(dbfirestore, "test"), {
 //    username: "Ada",
 //  });みたいな感じでfirebaseにデータを送れる
-export const uploadCat=(fileData)=>{
+export const uploadCat=(image, color, pattern, breed, AdultOrChild, isEarCut, hasCollar, comment, latitude, longitude, userId, isNew)=>{
   const metadata={
     contentType: 'image/jpeg',
   }
+  const imageId = uuidv4();
   const storage = getStorage();
-  const imageRef = ref(storage, '/' + 'test');//testの部分は猫のIDにする。その他も同様
-  uploadBytesResumable(imageRef, fileData, metadata)
+  const imageRef = ref(storage, '/' + imageId);
+  uploadBytesResumable(imageRef, image, metadata)
     .then((snapshot) => {
       getDownloadURL(snapshot.ref)
         .then((url) => {
-          addDoc(collection(getFirestore(), "test"), {
-            filePath : url,
-            createDate: serverTimestamp()
+          addDoc(collection(getFirestore(), "TestCat"), {
+            imageurl : url,
+            color : color,
+            pattern : pattern,
+            breed : breed,
+            AdultOrChild : AdultOrChild,
+            isEarCut : isEarCut,
+            hasCollar : hasCollar,
+            comment : comment,
+            latitude : latitude,
+            longitude : longitude,
+            userId : userId,
+            isNew : isNew,
+            postedAt: serverTimestamp()
           })
             .then(()=>{
               console.log('success')
@@ -43,3 +56,48 @@ export const downloadCat=async()=>{
   })
   return data
 }
+
+// 猫を検索する関数. 今は猫のIDを返すようにしてるけど、猫の情報を返すように変える必要がある
+export const searchCat = async (filter) => {
+    const data = [];
+    const collectionRef = collection(getFirestore(firebaseApp), "TestCat");
+    let queryRef = collectionRef;
+
+    // 猫の情報を絞り込む
+    if (filter.color) {
+      queryRef = query(queryRef,where("color", "==", filter.color));
+    }
+    if (filter.pattern) {
+      queryRef = query(queryRef,where("pattern", "==", filter.pattern));
+    }
+    if (filter.breed) {
+      queryRef = query(queryRef,where("breed", "==", filter.breed));
+    }
+    if (filter.AdultOrChild) {
+      queryRef = query(queryRef,where("AdultOrChild", "==", filter.AdultOrChild));
+    }
+    if (filter.isEarCut) {
+      queryRef = query(queryRef,where("isEarCut", "==", filter.isEarCut));
+    }
+    if (filter.hasCollar) {
+      queryRef = query(queryRef,where("hasCollar", "==", filter.hasCollar));
+    }
+    if (filter.latitude) {
+      queryRef = query(queryRef,where("latitude", "==", filter.latitude));
+    }
+    if (filter.longitude) {
+      queryRef = query(queryRef,where("longitude", "==", filter.longitude));
+    }
+    if (filter.keepitfalse) { //TODO: 日時で絞り込み
+      queryRef = query(queryRef,where("postedAt", "<", Date(filter.postedAt)));
+    }
+    if (filter.isNew) {
+      queryRef = query(queryRef,where("isNew", "==", filter.isNew));
+    }
+  
+    const querySnapshot = await getDocs(queryRef);
+    querySnapshot.forEach((doc) => {
+      data.push(doc.id);
+    });
+    return data;
+  };
