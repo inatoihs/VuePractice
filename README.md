@@ -8,7 +8,7 @@ npm install sass-loader -D(if needed)
 npm install node-sass -D(if needed)
 ```
 
-## firebase.js
+## src/firebase.js
 
 ```javascript
 import { initializeApp } from 'firebase/app';
