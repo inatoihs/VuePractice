@@ -7,30 +7,30 @@ import { v4 as uuidv4 } from 'uuid';
 //addDoc(collection(dbfirestore, "test"), {
 //    username: "Ada",
 //  });みたいな感じでfirebaseにデータを送れる
-export const uploadCat=(image, color, pattern, breed, AdultOrChild, isEarCut, hasCollar, comment, latitude, longitude, userId, isNew)=>{
+export const uploadCat=(catdata)=>{
   const metadata={
     contentType: 'image/jpeg',
   }
   const imageId = uuidv4();
   const storage = getStorage();
   const imageRef = ref(storage, '/' + imageId);
-  uploadBytesResumable(imageRef, image, metadata)
+  uploadBytesResumable(imageRef, catdata.image, metadata)
     .then((snapshot) => {
       getDownloadURL(snapshot.ref)
         .then((url) => {
           addDoc(collection(getFirestore(), "TestCat"), {
             imageurl : url,
-            color : color,
-            pattern : pattern,
-            breed : breed,
-            AdultOrChild : AdultOrChild,
-            isEarCut : isEarCut,
-            hasCollar : hasCollar,
-            comment : comment,
-            latitude : latitude,
-            longitude : longitude,
-            userId : userId,
-            isNew : isNew,
+            color : catdata.color,
+            pattern : catdata.pattern,
+            breed : catdata.breed,
+            AdultOrChild : catdata.AdultOrChild,
+            isEarCut : catdata.isEarCut,
+            hasCollar : catdata.hasCollar,
+            comment : catdata.comment,
+            latitude : catdata.latitude,
+            longitude : catdata.longitude,
+            userId : catdata.userId,
+            isNew : catdata.isNew,
             postedAt: serverTimestamp()
           })
             .then(()=>{

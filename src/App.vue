@@ -14,6 +14,7 @@
       <!--  -->
       <create></create>
       <search></search>
+      <Gmap></Gmap>
 
     </v-main>
   </v-app>
@@ -28,6 +29,7 @@
 <script>
 import create from './components/PostCat.vue'
 import search from './components/SearchCat.vue'
+import Gmap from './components/Gmap.vue'
 export default{
   data: () => ({ drawer: null }),
   components:{
